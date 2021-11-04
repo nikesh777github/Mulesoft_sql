@@ -1,0 +1,67 @@
+package com.mycompany.mysql;
+
+import java.sql.*;
+import java.io.*; // for dynamic statement and buffer-read
+public class one {
+    public static void main(String[] args) {
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            
+            // creating a connection
+            
+            String url="jdbbc:mysql://localhost:3306/movies";
+            String username="nikesh";
+            String password="ary";
+            
+            Connection con=DriverManager.getConnection(url,username,password);
+            
+            //create a query
+            String q="create table Movies(tName varchar(100) not null, tActor varchar(100), tActress varchar(100), tDirector varchar(100), tYearOfRelease int(4))";
+            
+            // creating a statement
+            
+            Statement stmt=con.createStatement();
+            stmt.executeUpdate(q);
+            System.out.println("table created as.: Movies");
+            
+            // taking input from USER
+            
+            String r="insert into Movies(tName,tActor,tActress,tDirector, tYearOfRelease) values(?,?,?,?,?)";
+            PreparedStatement pstmt=con.prepareStatement(q);
+            
+            BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("Enter NAME of Movie.: ");
+            String name=br.readLine();
+            System.out.println("Enter ACTOR of Movie.: ");
+            String actor=br.readLine();
+            System.out.println("Enter ACTRESS of Movie.: ");
+            String actress=br.readLine();
+            System.out.println("Enter DIRECTOR of Movie.: ");
+            String director=br.readLine();
+            System.out.println("Enter Year of Release of Movie.: ");
+            String y=br.readLine();
+            int yor=Integer.parseInt(y);
+            
+            // setting the values to query
+            
+            pstmt.setString(1,name);
+            pstmt.setString(2,actor);
+            pstmt.setString(3,actress);
+            pstmt.setString(4,director);
+            pstmt.setInt(5,yor);
+            
+            pstmt.executeUpdate();
+            
+            System.out.println("Data Inserted....");
+            
+            
+            
+            
+            con.close();
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+}
